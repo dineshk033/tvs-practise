@@ -6,6 +6,27 @@ import { TransactionTable } from "./components/transaction-table";
 import { transactions } from "./mock/transaction";
 
 function App() {
+  const [filteredTxn, setFlteredTxn] = useState(transactions);
+
+  const handleSearch = (id) => {
+    const temp = transactions.filter((item) => item.id == id);
+    setFlteredTxn(temp);
+  };
+
+  const handleFilter = (arg) => {
+    if (arg) {
+      const { category, type } = arg;
+      // if(category )
+      const temp = transactions.filter(
+        (item) =>
+          (category == "" || item.category === category) &&
+          (!type || item.type === type)
+      );
+      setFlteredTxn(temp);
+    } else {
+      setFlteredTxn(transactions);
+    }
+  };
   return (
     <div className="container mt-4">
       <div className="row">
@@ -22,12 +43,15 @@ function App() {
         </h4>
         {/* Filter Section - 3 columns */}
         <div className="col-md-3">
-          <FilterPanel />
+          <FilterPanel handleFilter={handleFilter} />
         </div>
 
         {/* Table Section - 9 columns */}
         <div className="col-md-9">
-          <TransactionTable transactions={transactions} />
+          <TransactionTable
+            transactions={filteredTxn}
+            handleSearch={handleSearch}
+          />
         </div>
       </div>
       <TransactionForm />

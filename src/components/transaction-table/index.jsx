@@ -1,11 +1,15 @@
 // components/TransactionTable.jsx
 import React from "react";
+import SearchTransaction from "../search-transaction/search-transaction";
 
-export const TransactionTable = ({ transactions }) => {
+export const TransactionTable = ({ transactions, handleSearch }) => {
   return (
     // <div className="card shadow-sm">
     <div className="card-body ">
-      <h5 className="card-title mb-2">Transactions</h5>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h5 className="card-title mb-2">Transactions</h5>
+        <SearchTransaction handleSearch={handleSearch} />
+      </div>
       <div
         className="table-responsive "
         style={{ height: "80vh", overflow: "auto" }}
