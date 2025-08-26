@@ -1,30 +1,65 @@
 // App.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TransactionForm from "./components/add-transaction";
 import { FilterPanel } from "./components/filter-panel";
 import { TransactionTable } from "./components/transaction-table";
-import { transactions } from "./mock/transaction";
+import { fetchTransactionData } from "./service/data";
 
+const INITIALFILTER = {
+  date: "",
+  minPrice: null,
+  maxPriceRef: null,
+  type: "",
+  category: "",
+};
 function App() {
-  const [filteredTxn, setFlteredTxn] = useState(transactions);
+  const [dataSource, setDataSource] = useState([]);
+  const [filteredTxn, setFlteredTxn] = useState([]);
+  const [search, setSearch] = useState(null);
+  const [filterProps, setFilterProps] = useState(INITIALFILTER);
+  //mounting phase called
+  useEffect(() => {
+    fetchTransactionData().then((data) => {
+      setDataSource(data);
+      setFlteredTxn(data);
+    });
+  }, []);
+  // useEffect(() => {
+  //   if (search !== null) {
+  //     const temp = dataSource.filter((item) => item.id == search);
+  //     setFlteredTxn(temp);
+  //   } else {
+  //     setFlteredTxn(dataSource);
+  //   }
+  // }, [search]);
+  useEffect(() => {
+    const { category, type } = filterProps;
+    // if(category )
+    const temp = dataSource.filter(
+      (item) =>
+        (category == "" || item.category === category) &&
+        (!type || item.type === type)
+    );
+    setFlteredTxn(temp);
+  }, [filterProps, dataSource]);
 
   const handleSearch = (id) => {
-    const temp = transactions.filter((item) => item.id == id);
-    setFlteredTxn(temp);
+    setSearch(id);
   };
 
   const handleFilter = (arg) => {
     if (arg) {
-      const { category, type } = arg;
-      // if(category )
-      const temp = transactions.filter(
-        (item) =>
-          (category == "" || item.category === category) &&
-          (!type || item.type === type)
-      );
-      setFlteredTxn(temp);
+      setFilterProps(arg);
+      // const { category, type } = arg;
+      // // if(category )
+      // const temp = dataSource.filter(
+      //   (item) =>
+      //     (category == "" || item.category === category) &&
+      //     (!type || item.type === type)
+      // );
+      // setFlteredTxn(temp);
     } else {
-      setFlteredTxn(transactions);
+      setFilterProps(INITIALFILTER);
     }
   };
   return (
@@ -48,6 +83,18 @@ function App() {
 
         {/* Table Section - 9 columns */}
         <div className="col-md-9">
+          <div>
+            {Object.keys(filterProps)
+              .filter((item) => !!filterProps[item])
+              .map((item) => (
+                <span
+                  onClick={() => setSearch(null)}
+                  className="badge bg-danger"
+                >
+                  {item}: {filterProps[item]}
+                </span>
+              ))}
+          </div>
           <TransactionTable
             transactions={filteredTxn}
             handleSearch={handleSearch}

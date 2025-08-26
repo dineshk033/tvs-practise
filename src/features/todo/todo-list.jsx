@@ -1,19 +1,30 @@
 import React, { useState } from "react";
 function TodoItem(props) {
   return (
-    <div className="d-flex g-4">
-      <input
-        defaultChecked={props.completed}
-        type="checkbox"
-        onChange={(e) => props.handleChange(e, props.id)}
-      />
-      <label className="ms-3">{props.todo}</label>
+    <div className="row g-4 align-items-center">
+      <div className="col-10">
+        <input
+          defaultChecked={props.completed}
+          type="checkbox"
+          onChange={() => props.handleChange(props.id)}
+        />
+        <label className="ms-3">{props.todo}</label>
+      </div>
+      <div className="col-2">
+        <button
+          className="btn btn-sm btn-danger"
+          onClick={() => props.handleDelete(props.id)}
+        >
+          x
+        </button>
+      </div>
     </div>
   );
 }
 
-export default function TodoList({ list, handleChange }) {
+export default function TodoList({ list, handleChange, handleDelete }) {
   const [isHover, setIsHover] = useState(null);
+  console.log("child");
   return (
     <ul className="list-group">
       {list.map((item) => (
@@ -26,7 +37,11 @@ export default function TodoList({ list, handleChange }) {
           onMouseLeave={() => setIsHover(null)}
         >
           {/* stateless or presenter or dummy component */}
-          <TodoItem {...item} handleChange={handleChange} />
+          <TodoItem
+            {...item}
+            handleChange={handleChange}
+            handleDelete={handleDelete}
+          />
         </li>
       ))}
     </ul>
