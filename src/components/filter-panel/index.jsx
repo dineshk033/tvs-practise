@@ -12,7 +12,7 @@ export const FilterPanel = ({ handleFilter }) => {
     const data = {
       date: dateRef.current.value,
       minPrice: minPriceRef.current.value,
-      maxPriceRef: maxPriceRef.current.value,
+      maxPrice: maxPriceRef.current.value,
       type: typeRef.current.value,
       category: categoryRef.current.value,
     };
@@ -78,10 +78,14 @@ export const FilterPanel = ({ handleFilter }) => {
             </select>
           </div>
 
-          <button type="submit" className="btn btn-primary w-100">
+          <button type="submit" className="btn btn-primary w-50">
             Apply Filter
           </button>
-          <button type="reset" onClick={() => handleFilter(null)}>
+          <button
+            type="reset"
+            className="btn btn-secondary w-50 "
+            onClick={() => handleFilter(null)}
+          >
             Reset
           </button>
         </form>

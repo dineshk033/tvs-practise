@@ -8,4 +8,4 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js"; // Includes Popper
 import Counter from "./features/counter/index.jsx";
 import CounterPage from "./pages/counter.jsx";
 import Todo from "./pages/todo.jsx";
-createRoot(document.getElementById("root")).render(<Todo />);
+createRoot(document.getElementById("root")).render(<App />);
