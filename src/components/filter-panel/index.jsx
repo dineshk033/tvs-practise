@@ -78,13 +78,22 @@ export const FilterPanel = ({ handleFilter }) => {
             </select>
           </div>
 
-          <button type="submit" className="btn btn-primary w-50">
+          <button type="submit" className="btn btn-primary w-50 me-5">
             Apply Filter
           </button>
           <button
             type="reset"
-            className="btn btn-secondary w-50 "
-            onClick={() => handleFilter(null)}
+            className="btn btn-secondary  "
+            onClick={() =>
+              handleFilter({
+                id: "",
+                date: "",
+                amount: 0,
+                type: "",
+                category: "",
+                description: "",
+              })
+            }
           >
             Reset
           </button>

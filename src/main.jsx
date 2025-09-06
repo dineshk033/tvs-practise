@@ -9,4 +9,4 @@ import Counter from "./features/counter/index.jsx";
 import CounterPage from "./pages/counter.jsx";
 import Todo from "./pages/todo.jsx";
 import Blog from "./pages/blog.jsx";
-createRoot(document.getElementById("root")).render(<Blog />);
+createRoot(document.getElementById("root")).render(<App />);

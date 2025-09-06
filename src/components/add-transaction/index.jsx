@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { validateTXN } from "../../utils/transaction-validate";
 
-const TransactionModal = () => {
+const TransactionModal = ({ onAdd }) => {
+  const formRef = useRef(null);
+  const closeRef = useRef(null);
   const [formData, setFormData] = useState({
-    id: 0,
+    id: Date.now(),
     date: "",
     amount: 0,
-    type: "",
+    type: "credit",
     category: "",
     description: "",
   });
 
   const handleChange = (e) => {
     let { id, value } = e.target;
-    if (id === "amount") {
+    if (id === "amount" && value !== "") {
       value = Number(value);
     }
     setFormData({
@@ -21,22 +23,33 @@ const TransactionModal = () => {
       [e.target.id]: value,
     });
   };
+  // Handles form submission, validates, and adds transaction
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(validateTXN(formData));
-    console.log(formData);
+    const err = validateTXN(formData);
+    if (Object.keys(err).length === 0) {
+      onAdd({ ...formData });
+      // Close modal after successful add
+      closeRef.current.click();
+    }
+  };
+
+  // Triggers form submit programmatically
+  const handleSave = () => {
+    formRef.current.click();
   };
   return (
     <div className="container mt-5">
       {/* Button trigger modal */}
-      {/* <button
+      <button
         type="button"
-        className="btn btn-primary"
+        ref={closeRef}
+        className="btn btn-primary d-none"
         data-bs-toggle="modal"
         data-bs-target="#transactionModal"
       >
         Add Transaction
-      </button> */}
+      </button>
 
       {/* Modal */}
       <div
@@ -74,6 +87,7 @@ const TransactionModal = () => {
                       className="form-control"
                       id="id"
                       value={formData.id}
+                      disabled
                       onChange={handleChange}
                     />
                   </div>
@@ -133,6 +147,7 @@ const TransactionModal = () => {
                     value={formData.category}
                     onChange={handleChange}
                   >
+                    <option value="">Select category</option>
                     <option value="food">Food</option>
                     <option value="shopping">Shopping</option>
                     <option value="entertainment">Entertainment</option>
@@ -160,7 +175,9 @@ const TransactionModal = () => {
                     onChange={handleChange}
                   />
                 </div>
-                <button type="submit">Add</button>
+                <button type="submit" ref={formRef} className="d-none">
+                  Add
+                </button>
               </form>
             </div>
 
@@ -172,7 +189,11 @@ const TransactionModal = () => {
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary">
+              <button
+                type="button"
+                onClick={handleSave}
+                className="btn btn-primary"
+              >
                 Save Transaction
               </button>
             </div>
